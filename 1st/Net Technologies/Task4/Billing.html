@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Buy the Books</title>
+
+		<!-- For greek language and more -->
+        <meta charset="utf-8">
+
+        <!-- linked CSS file -->
+        <link rel="stylesheet" type="text/css" href="Css1.css">
+
+
+        <script>
+
+        	function Portal(nCard, fname, lname, copies, scode)
+        	{
+        		//check copies for numbers
+				if (copies.match(/^\d+$/))
+		        {
+		        	alert("Number of copies: "+ copies +"\nPrice: "+ copies*100 +"€ \nplus Tax: "+copies*100/11+"€\nSum: "+ copies*100+copies*100/11+"€")
+		        }
+	        	else
+		        {
+		        	alert("Number of copies is not validated")
+		        }
+
+        		//check card number for numbers
+        		if (nCard.match(/^\d+$/))
+		        {
+		        	alert("Your credit card number was validated!")
+		        }
+	        	else
+		        {
+		        	alert("Your card number	wasn't correct. Please try again!") 
+		        }
+				
+				//check Security code for numbers
+				if (scode.match(/^\d+$/))
+		        {
+		        	alert("Your Security code was validated!")
+		        }
+	        	else
+		        {
+		        	alert("Your Security code	wasn't correct. Please try again!") 
+		        }
+
+				//check First Name and Last Name for latin characters
+				if (/^[a-zA-Z]+$/.test(lname) && /^[a-zA-Z]+$/.test(fname) )
+		        {
+		        	alert("You know your Name!")
+		        }
+	        	else
+		        {
+		        	alert("Write your First Name or your Last Name again and correct!")
+		        }
+
+		    }
+
+
+		    function ClickMe()
+			{
+				CheckFields(document.getElementById('copies').value, document.getElementById('nCard').value);
+			}
+			document.getElementById('btn').onclick= function(){ClickMe()};
+        </script>
+	</head>
+	<body>
+		
+		Price of Books: 100€ per Book
+		
+		<!-- Date Script -->
+		<p id="demo"></p>
+		<script>
+			var d = new Date();
+			document.getElementById("demo").innerHTML = d;
+		</script>
+
+
+		<form method="post" action="connect.php">
+			<fieldset>
+				<legend>Billing information</legend>
+
+				<!-- Book's list -->
+				<select name="Books">
+					<option value="At the Mountains of Madness">At the Mountains of Madness</option>
+					<option value="The Call of Cthulhu">The Call of Cthulhu</option>
+					<option value="The Shadow Out of Time">The Shadow Out of Time</option>
+					<option value="The Lurking Fear">The Lurking Fear</option>
+				</select> 
+				<br><br>
+				Copies*:<br>
+				<input id="copies" type="text" size="30" name="copies"><br><br>
+				<!-- Cyrcle Buttons -->
+				<br>
+				<input type="radio" name="gender" value="Master-Card" checked> Master-Card
+				<input type="radio" name="gender" value="Visa"> Visa
+				<input type="radio" name="gender" value="PaySafe"> PaySafe
+				<input type="radio" name="gender" value="Other"> Other Payment Method<br>
+				<br>
+
+				<!-- Input text areas -->
+				Date:<br><input placeholder="DD / MM / YY" type="text" size="30" name="Date"><br>
+				Card number*:<br>
+				<input id="nCard" placeholder="****-****-****-****" maxlength="16" type="text" size="30" name="nCard"><br>					<!-- Check button for Credit Card number -->
+				<br>
+				Expiry date:<br><input placeholder="MM / YY" type="text" size="30" name="expdate"><br>
+				Security code:<br><input placeholder="***" maxlength="3" type="text" size="30" id="scode" name="scode"><br>
+				E-mail:<br><input type="text" name="email" id="email" placeholder="example@example.ex">
+				First Name:<br><input type="text" size="30" id="fname" name="fname"><br>
+				Last Name:<br><input type="text" size="30" id="lname" name="lname"><br>
+				Billing Address:<br><input type="text" size="30" name="addrb"><br><br>
+
+				
+			
+				<input type="button" id="btn" value="Register" onClick="Portal(form.nCard.value, form.fname.value, form.lname.value, form.copies.value, form.scode.value)"/>
+				<!-- Reset Button -->
+				<input type="reset" value="Cancel">
+			</fieldset>
+		</form>
+
+	</body>
+</html>

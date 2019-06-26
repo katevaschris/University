@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ContactPage</title>
+
+		<!-- For greek language and more -->
+        <meta charset="utf-8">
+
+        <!-- linked CSS file -->
+        <link rel="stylesheet" type="text/css" href="sharing.css">
+
+		<script>
+					//Function for checking elements
+					function CheckFileds(fname, lname, email, message) 
+					{
+						if (fname=="" || lname=="" || email=="" || message=="")
+						{
+							alert("You must fill out the fields!")
+						}
+						else
+						{
+							alert("Your submission was completed!")
+							Linux(fname, lname, email, message);
+						}
+					}
+
+
+					function ClickMe()
+					{
+						CheckFields(document.getElementById('fname').value, document.getElementById('lname').value, document.getElementById('email').value, document.getElementById('message').value);
+					}
+					document.getElementById('btn').onclick= function(){ClickMe()};
+
+					//Function for floating window with pre-filled items
+					function Linux(fname, lname, email, message) 
+					{
+					    if (confirm("Do you wan tot submit? \n\nFirst Name: "+ fname +"\nLast Name: "+ lname +"\nE-mail: "+ email +"\nMessage: "+ message))
+					    {
+					        //window.open('mailto:katevaschris@gmail.com');
+					        window.location.href = "mailto:katevaschris@gmail.com?subject=Question&body=The First Rule of... is that you do not talk about it!";
+					    }
+					    else 
+					    {
+					    	window.location="ContactPage.html"
+					    }
+					}
+
+
+
+
+		</script>   
+		      
+	</head>
+
+	<body>
+
+		<form>
+			<fieldset>
+				<legend>Contact Form</legend>
+
+				First Name*:<br>
+				<input id="fname" size="30" type="text" name="fname" />
+				<br>
+				Last Name*:<br>
+				<input id="lname" size="30" type="text" name="lname" />
+				<br>
+				Date:<br>
+				<input placeholder="DD / MM /YY" type="text" size="30" name="date">
+				<br>
+				Phone:<br>
+				<input type="text" size="30" name="phone">
+				<br>
+				E-mail*:<br>
+				<input placeholder="example@example.exaple" type="text" size="30" name="email">
+				<br>
+				Message*:<br>
+				<textarea rows="10" cols="50" id="message" name="message"></textarea>
+				<br>
+				Fields with * are mandatory
+				<br>
+
+
+				
+				<!-- Buttons -->
+				<input type="button" id="btn" value="Register" onClick="CheckFileds(form.fname.value, form.lname.value, form.email.value, form.message.value, form.message.value)"  />
+				<input type="reset" value="Clear">
+			</fieldset>
+		</form>
+
+			
+	</body>
+</html>

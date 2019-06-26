@@ -1,0 +1,36 @@
+/* Pages background-color green */
+body {background-color:#006600;}
+
+/* Paragraph's background-color black and// Fonts color pink */
+p {background-color: #006600; color: pink; text-align: center;}
+
+/* Tables with border(color black) */
+table , td{border:1px solid black;}
+
+/* Header's background color pink with Margin same as header2 */
+h1 {background-color: pink; margin-left: 300px; margin-right: 300px; text-align: center; font-style: italic; font-size: 40px; }
+
+/* Header 2 color:Tomato */
+h2 {background-color: #ff6347; margin-left: 30px; margin-right: 30px; text-align: center;}
+
+/* Font-family(Astloch) for Main's Page h1.prototype */
+h1.prototype {font-family: Astloch;}
+
+
+/* Font-family(Astloch) for Book's Page h1.prototypev2 */
+h1.prototypev2 {font-family: Astloch;}
+
+
+/* List */
+ol.books {list-style-type: circle;}
+
+/* Main's Page table with no borders */
+table.ftable {border-collapse: collapse;}
+
+/* Book's page Font size and color */
+p.fp {font-size: 17px; color: black}
+
+/* Hyperlink's color blu */
+a {color: blue;}
+
+

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Buy the Books</title>
+
+		<!-- For greek language and more -->
+        <meta charset="utf-8">
+
+        <!-- linked CSS file -->
+        <link rel="stylesheet" type="text/css" href="Css1.css">
+	</head>
+	<body>
+		<form>
+			<fieldset>
+				<legend>Billing information</legend>
+
+				<!-- Book's list -->
+				<select name="Books">
+					<option value="At the Mountains of Madness">At the Mountains of Madness</option>
+					<option value="The Call of Cthulhu">The Call of Cthulhu</option>
+					<option value="The Shadow Out of Time">The Shadow Out of Time</option>
+					<option value="The Lurking Fear">The Lurking Fear</option>
+				</select> 
+				<br><br>
+				Copies:<br><input type="text" size="30" name="copies"><br><br>
+				<!-- Cyrcle Buttons -->
+				<input type="radio" name="gender" value="Master-Card" checked> Master-Card
+				<input type="radio" name="gender" value="Visa"> Visa
+				<input type="radio" name="gender" value="PaySafe"> PaySafe
+				<input type="radio" name="gender" value="Other"> Other Payment Method<br><br>
+
+				<!-- Input text areas -->
+				Date:<br><input placeholder="DD / MM / YY" type="text" size="30" name="Date"><br>
+				Card number:<br><input placeholder="****-****-****-****" maxlength="16" type="text" size="30" name="nuCard"><br>
+				Expiry date:<br><input placeholder="MM / YY" type="text" size="30" name="expdate"><br>
+				Security code:<br><input placeholder="***" maxlength="3" type="text" size="30" name="secode"><br>
+				First Name:<br><input type="text" size="30" name="firstname"><br>
+				Last NAme:<br><input type="text" size="30" name="lastname"><br>
+				Billing Address:<br><input type="text" size="30" name="addrb"><br><br>
+
+				<!-- Submit Button -->
+				<input type="submit" value="Submit">
+
+				<!-- Reset Button -->
+				<input type="reset" value="Cancel">
+			</fieldset>
+		</form>
+
+	</body>
+</html>

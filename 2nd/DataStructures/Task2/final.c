@@ -142,28 +142,31 @@ struct node* print2DUtil(struct node* root, int space, int COUNT)
 
 
 
-
-int inorderC(struct node *root, int j, char given[]) 
+int inorderC(struct node *root, char *word[]) 
 { 
-    int c = 0;
-    char xi[255];
+    char x[255];
+    int j =0;
     if (root != NULL) 
     { 
-        inorder(root->left);
-        strcpy(xi, root->key);
-        for (int i = 0; i < j; ++i)
+        
+        inorderC(root->left, word);
+
+        strcpy(x , root->key);
+        for (int i = 0; i < strlen(word); ++i)
         {
-            if (xi[i] == given[i])
+            if (x[i] == word[i])
             {
-                c++;
+                j++;
             }
         }
-        if (c == j)
+        printf("%d\n", j); 
+        if (j == strlen(word))
         {
-            printf("%s \n", root->key); 
+            printf("8%s \n", root->key); 
+            j = 0;
         }
-        
-        inorder(root->right); 
+
+        inorderC(root->right, word); 
     } 
     return 0;
 } 
@@ -212,7 +215,7 @@ int main()
                 printf("Please input chars (search based on chars): ");
                 scanf("%s", word);
                 ans = strlen(word);
-                inorderC(root, ans, word);
+                inorderC(root, word);
                 break;
 
             case 4:

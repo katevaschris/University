@@ -4,8 +4,7 @@
 #include<stdbool.h>
 struct node 
 { 
-    char key[255]; 
-    char gkey[255];
+    char eng[255];
     struct node *left, *right; 
 }; 
 
@@ -41,32 +40,33 @@ int main()
 
 
 
-struct node *newNode(char *item[255]) 
+struct node *newNode(char *item[]) 
 { 
     struct node *temp =  (struct node *)malloc(sizeof(struct node)); 
-    temp->key = item; 
+    temp->eng = item; 
     temp->left = temp->right = NULL; 
     return temp; 
 } 
    
+
 void inorder(struct node *root) 
 { 
     if (root != NULL) 
     { 
         inorder(root->left); 
-        printf("%c \n", root->key); 
+        printf("%s\n", root->key); 
         inorder(root->right); 
     } 
 } 
    
-struct node* insert(struct node* node, char *key[255]) 
+
+struct node* insert(struct node* node, char *key[]) 
 { 
     if (node == NULL)
     {
         return newNode(key); 
     }
-    char x[255] = node->key;
-    int ret = strcmp(key, x);
+    int ret = strcmp(key, node->eng);
     //key > x
     if (ret > 0) 
     {

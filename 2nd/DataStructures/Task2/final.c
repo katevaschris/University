@@ -23,8 +23,8 @@ int inorder(struct node *root)
     if (root != NULL) 
     { 
         inorder(root->left); 
-        //printf("%s \n", root->key); 
-        c ++;
+        printf("%s \n", root->key); 
+        c++;
         inorder(root->right); 
     } 
     return c;
@@ -143,6 +143,34 @@ struct node* print2DUtil(struct node* root, int space, int COUNT)
 
 
 
+int inorderC(struct node *root, int j, char given[]) 
+{ 
+    int c = 0;
+    char xi[255];
+    if (root != NULL) 
+    { 
+        inorder(root->left);
+        strcpy(xi, root->key);
+        for (int i = 0; i < j; ++i)
+        {
+            if (xi[i] == given[i])
+            {
+                c++;
+            }
+        }
+        if (c == j)
+        {
+            printf("%s \n", root->key); 
+        }
+        
+        inorder(root->right); 
+    } 
+    return 0;
+} 
+
+
+
+
 
 int main() 
 { 
@@ -151,12 +179,18 @@ int main()
     insert(root, "gravit");
     insert(root, "gravityyyyy");
     insert(root, "mother"); 
+    insert(root, "motherr"); 
     insert(root, "mirror");
-    insert(root, "baaap");char word[255];
+    insert(root, "cyberpunk2077");
+    insert(root, "cyberpunk");
+    insert(root, "cyberpun");
+    insert(root, "cyber");
+    insert(root, "thecakeisaliethecakeisaliethecakeisalie");
+    char word[255];
     int COUNT = inorder(root);
     while(true)
     {
-        COUNT = inorder(root);
+        //COUNT = inorder(root);
         printf("Choose one from the following actions: \n 1:Insert element \n 2:Delete element \n 3:Search element \n 4:Print Binary tree \n 0:Exit system: ");
         int ans = 0;
         scanf("%d", &ans);
@@ -167,24 +201,24 @@ int main()
                 scanf("%s", word);
                 insert(root, word);
                 break;
+
             case 2:
                 printf("Please delete(deletes a node) a word (Use only characters): ");
                 scanf("%s", word);
                 deleteNode(root, word);
                 break;
 
-            
             case 3:
-
+                printf("Please input chars (search based on chars): ");
+                scanf("%s", word);
+                ans = strlen(word);
+                inorderC(root, ans, word);
                 break;
 
             case 4:
-                //COUNT = inorder(root);
                 print2DUtil(root,0, COUNT);
-                //pr(root);
                 break;
 
-            
             default:
                 exit(EXIT_SUCCESS);
                 break;

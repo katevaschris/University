@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include<string.h>
 #include <stdbool.h>
+#include "windows.h"
+#include <string>
 
 typedef struct node
 {
@@ -30,6 +32,10 @@ typedef struct node
 	*/
 	struct node* right;
 	struct node* left;
+
+	//Pointer που δείχνει στην αντίστοιχη λίστα με τις λέξεις που έχουν καταχωρηθεί και αρχίζουν από το γράμμα let
+	struct node* allw;
+
 } node_t;
 
 
@@ -63,8 +69,21 @@ void main()
 				
 				if(!f)
 				{
-					//Χρησιμοποιούμε τη συνάρτηση search για να δούμε αν υπάρχει το πρώτο γράμμα της λέξης που δώθηκε
-					search(root, word[0]);
+					/*
+						Χρησιμοποιούμε τη συνάρτηση search για να δούμε αν υπάρχει το πρώτο γράμμα της λέξης που δώθηκε
+						Αν υπάρχει το γράμμα τότε εκτελείται η else 
+						Αν το γράμμα δεν υπάρχει εκτελείται η if
+					*/
+					if (search(root, word[0]))
+					{
+						//Χρησιμοποιείται η συνάρτηση push, για τη δημιουργεία νέου κόμβου (για τη δημιουργία νέου γράμματος στο δέντρο)
+						push(root, word[0], word);
+					}
+					else
+					{
+						//Χρησιμοποιείται η συνάρτηση insert για την εισαγωγή της νέας λέξης στο πίνακα
+						insert(word);
+					}
 				}
 				else
 				{
@@ -73,8 +92,6 @@ void main()
 					root->left = NULL;
 					f = false;
 				}
-				
-
 				break;
 
 			
@@ -99,27 +116,50 @@ void main()
 
 bool search(node_t* root, char c)
 {
+	/*
+		Αν η search είναι επιστρέφει true τότε το γράμμα δεν υπάρχει
+		αλλιώς επιστρέφει false και το γράμμα υπάρχει
+	*/
 	node_t* current = root;
-
-	return false;
-
-	return true;
-
-}
-
-
-int push(node_t* root)
-{
-	node_t* current = root;
-	while (current->next != NULL)
+	while ( (c != current->let) && ( (current->left != NULL) && (current->right != NULL) )  )
 	{
-		current = current->next;
+		if (c < current->let)
+		{
+			current = current->left;
+		}
+		else if(c > current->let)
+		{
+			current = current->right;
+		}
 	}
-	//Δημιουργεί τον νέο κόμβο
-	current->next = malloc(sizeof(node_t));
-	current->next->val = val;
-	current->next->next = NULL;
-	return 0;
+	if ((c != current->let) && ((current->left != NULL) && (current->right != NULL)))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 
-*/
+
+int push(node_t* root, char c, char word[] )
+{
+	/*
+		Ψάχνω να βρω που θα τοποθετηθεί ο νέος κόμβος (ξέρω ότι δεν υπάρχει)
+	*/
+	node_t* current = root;
+	while ( (current->left != NULL) && (current->right != NULL)  )
+	{
+		if (c < current->let)
+		{
+			current = current->left;
+		}
+		else if (c > current->let)
+		{
+			current = current->right;
+		}
+	}
+	current->next = malloc(sizeof(node_t));
+}

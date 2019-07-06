@@ -1,7 +1,7 @@
 #include<stdio.h> 
 #include<stdlib.h> 
 #include<stdbool.h>
-   
+
 struct node 
 { 
     char key[255]; 
@@ -18,14 +18,16 @@ struct node *newNode(char *item[])
 } 
    
 
-void inorder(struct node *root) 
-{ 
+int inorder(struct node *root) 
+{ int COUNT = 0; 
     if (root != NULL) 
     { 
         inorder(root->left); 
-        printf("%s \n", root->key); 
+        //printf("%s \n", root->key); 
+        COUNT ++;
         inorder(root->right); 
     } 
+    return COUNT;
 } 
    
 
@@ -47,14 +49,11 @@ struct node* insert(struct node* node, char *key[])
     }
     else
     {
-        printf("String already exists");
+        printf("String already exists \n");
     }
     
     return node; 
 } 
-
-
-//------------------------
 
 struct node * minValueNode(struct node* node) 
 { 
@@ -114,8 +113,39 @@ struct node* deleteNode(struct node* root, char *key[])
 
 
 
+//---------------
+struct node* print2DUtil(struct node* root, int space) 
+{ 
+    // Base case 
+    int COUNT = inorder(root);
+    // Increase distance between levels 
+    space += COUNT; 
+  
+    // Process right child first 
+    print2DUtil(root->right, space); 
+  
+    // Print current node after space 
+    // count 
+    printf("\n"); 
+    for (int i = COUNT; i < space; i++)
+    {
+        printf(" "); 
+    }
+    printf("%s \n", root->key); 
+  
+    // Process left child 
+    print2DUtil(root->left, space); 
+} 
+  
+// Wrapper over print2DUtil() 
+struct node* print2D(struct node* root) 
+{ 
+   // Pass initial space count as 0 
+   print2DUtil(root, 0); 
+} 
+//---------------
 
-//------------------------
+
 int main() 
 { 
     struct node *root = NULL; 
@@ -127,7 +157,7 @@ int main()
     
     while(true)
     {
-        printf("Choose one from the following actions: \n 1:Insert element \n 2:Delete element \n 3:Search element \n 0:Exit system: ");
+        printf("Choose one from the following actions: \n 1:Insert element \n 2:Delete element \n 3:Search element \n 4:Print Binary tree \n 0:Exit system: ");
         int ans = 0;
         scanf("%d", &ans);
         switch (ans)
@@ -136,18 +166,20 @@ int main()
                 printf("Please insert(creates new node) a word (Use only characters): ");
                 scanf("%s", word);
                 insert(root, word);
-                inorder(root);
                 break;
             case 2:
                 printf("Please delete(deletes a node) a word (Use only characters): ");
                 scanf("%s", word);
                 deleteNode(root, word);
-                inorder(root); 
                 break;
 
             
             case 3:
 
+                break;
+
+            case 4:
+                print2D(root);
                 break;
 
             

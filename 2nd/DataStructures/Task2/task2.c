@@ -16,10 +16,6 @@
 
 #include<stdio.h>
 #include <stdlib.h>
-#include<string.h>
-#include <stdbool.h>
-#include "windows.h"
-#include <string>
 
 typedef struct node
 {
@@ -46,8 +42,7 @@ void main()
 	
 	//Δέσμευση χώρου για την υλοποίση ενός κόμβου από το struct node_t
 	node_t* root = malloc(sizeof(node_t));
-	bool f = true;
-
+	
 	//Το πρόγραμμα εκτελείται μέχρι ο χρήστης να επιλέξη ενέργεια με αριθμό διάφορο του 1, 2, 3. Έτσι το πρόγραμμα θα τερματίσει (Δες default στη switch)
 	while (true)
 	{
@@ -66,31 +61,20 @@ void main()
 				printf("Please insert a word (Use only characters): ");
 				char word[255];
 				scanf("%s", word);
-				
-				if(!f)
+				/*
+					Χρησιμοποιούμε τη συνάρτηση search για να δούμε αν υπάρχει το πρώτο γράμμα της λέξης που δώθηκε
+					Αν υπάρχει το γράμμα τότε εκτελείται η else 
+					Αν το γράμμα δεν υπάρχει εκτελείται η if
+				*/
+				if (search(root, word[0]))
 				{
-					/*
-						Χρησιμοποιούμε τη συνάρτηση search για να δούμε αν υπάρχει το πρώτο γράμμα της λέξης που δώθηκε
-						Αν υπάρχει το γράμμα τότε εκτελείται η else 
-						Αν το γράμμα δεν υπάρχει εκτελείται η if
-					*/
-					if (search(root, word[0]))
-					{
-						//Χρησιμοποιείται η συνάρτηση push, για τη δημιουργεία νέου κόμβου (για τη δημιουργία νέου γράμματος στο δέντρο)
-						push(root, word[0], word);
-					}
-					else
-					{
-						//Χρησιμοποιείται η συνάρτηση insert για την εισαγωγή της νέας λέξης στο πίνακα
-						insert(word);
-					}
-				}
+					//Χρησιμοποιείται η συνάρτηση push, για τη δημιουργεία νέου κόμβου (για τη δημιουργία νέου γράμματος στο δέντρο)
+					push(root, word[0], word);
+				}					
 				else
 				{
-					root->let = word[0];
-					root->right = NULL;
-					root->left = NULL;
-					f = false;
+					//Χρησιμοποιείται η συνάρτηση insert για την εισαγωγή της νέας λέξης στο πίνακα
+					insert(word);
 				}
 				break;
 
@@ -113,53 +97,3 @@ void main()
 	}
 }
 
-
-bool search(node_t* root, char c)
-{
-	/*
-		Αν η search είναι επιστρέφει true τότε το γράμμα δεν υπάρχει
-		αλλιώς επιστρέφει false και το γράμμα υπάρχει
-	*/
-	node_t* current = root;
-	while ( (c != current->let) && ( (current->left != NULL) && (current->right != NULL) )  )
-	{
-		if (c < current->let)
-		{
-			current = current->left;
-		}
-		else if(c > current->let)
-		{
-			current = current->right;
-		}
-	}
-	if ((c != current->let) && ((current->left != NULL) && (current->right != NULL)))
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-
-}
-
-
-int push(node_t* root, char c, char word[] )
-{
-	/*
-		Ψάχνω να βρω που θα τοποθετηθεί ο νέος κόμβος (ξέρω ότι δεν υπάρχει)
-	*/
-	node_t* current = root;
-	while ( (current->left != NULL) && (current->right != NULL)  )
-	{
-		if (c < current->let)
-		{
-			current = current->left;
-		}
-		else if (c > current->let)
-		{
-			current = current->right;
-		}
-	}
-	current->next = malloc(sizeof(node_t));
-}

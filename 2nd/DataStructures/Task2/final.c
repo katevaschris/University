@@ -1,6 +1,7 @@
 #include<stdio.h> 
 #include<stdlib.h> 
 #include<string.h>
+#include<stdbool.h>
 struct node 
 { 
     char key[255]; 
@@ -14,11 +15,11 @@ int main()
 { 
 
     struct node *root = NULL;
-    root = insert(root, "gravity", "βαρύτητα");
-    insert(root, "closet", "ντουλάπα");
-    insert(root, "mirror", "καθρεύτης");
-    insert(root, "mother", "μητέρα");
-    insert(root, "black", "μαύρος");
+    root = insert(root, "gravity");
+    insert(root, "closet");
+    insert(root, "mirror");
+    insert(root, "mother");
+    insert(root, "black");
     while(true)
     {
 
@@ -31,7 +32,6 @@ int main()
                 printf("Please insert a word (Use only characters): ");
                 char word[255];
                 scanf("%s", word);
-                ans = ssearch(root, word);
                 break;
             inorder(root);
         }
@@ -40,38 +40,6 @@ int main()
 } 
 
 
-
-
-
-int ssearch(node_t* root, char *c)
-{
-    node_t* current = root;
-    while ( (c != current->let) && ( (current->left != NULL) && (current->right != NULL) )  )
-    {
-        if (c < current->let)
-        {
-            current = current->left;
-        }
-        else if(c > current->let)
-        {
-            current = current->right;
-        }
-    }
-    printf("%c",current->let);
-    if (c == current->let)
-    {
-        //not exist
-        return 1;
-    }
-    else
-    {
-        //exists
-        return 0;
-    }
-
-}
-
-   
 
 struct node *newNode(char *item[255]) 
 { 
@@ -97,7 +65,7 @@ struct node* insert(struct node* node, char *key[255])
     {
         return newNode(key); 
     }
-    char x [255] = node->key;
+    char x[255] = node->key;
     int ret = strcmp(key, x);
     //key > x
     if (ret > 0) 
@@ -114,4 +82,4 @@ struct node* insert(struct node* node, char *key[255])
         printf("String already exists!");
     }
     return node; 
-} 
+}  

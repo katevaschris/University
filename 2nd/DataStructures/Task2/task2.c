@@ -12,88 +12,231 @@
 	Athens 5, July 2019
 
 	Main purpose:
-*/
+*/#include<stdio.h> 
+#include<stdlib.h>
+#include<stdbool.h> 
 
-#include<stdio.h>
-#include <stdlib.h>
+struct node 
+{ 
+    char key[255];
+    char gkey[255]; 
+    struct node *left, *right; 
+}; 
+   
 
-typedef struct node
-{
-	//Μεταβλητή που περιέχει το γράμμα
-	char let;
-	/*
-		Χρησιομοποιούνται 2 pointers για να καθορίσουν το επόμενο-"παιδί" του κόμβου
-		Αν η τιμή του παιδιού-κόμβου είναι μικρότερη από την τιμή του γονέα-κόμβου τότε το χρησιμοποιείται ο αριστερός δείκτης
-		Αντίθετα αν είναι μεγαλύτερη, χρησιμοποιείται ο δεξής δείκτης
-	*/
-	struct node* right;
-	struct node* left;
+struct node *newNode(char *item[], char*gitem[]) 
+{ 
+    struct node *temp =  (struct node *)malloc(sizeof(struct node)); 
+    strcpy(temp->key,item);
+    strcpy(temp->gkey,gitem); 
+    temp->left = temp->right = NULL; 
+    return temp; 
+} 
+   
 
-	//Pointer που δείχνει στην αντίστοιχη λίστα με τις λέξεις που έχουν καταχωρηθεί και αρχίζουν από το γράμμα let
-	struct node* allw;
+int inorder(struct node *root) 
+{ 
+    int c = 0; 
+    if (root != NULL) 
+    { 
+        inorder(root->left); 
+        printf("%s \n", root->key); 
+        c++;
+        inorder(root->right); 
+    } 
+    return c;
+} 
+   
 
-} node_t;
+struct node* insert(struct node* node, char *key[], char *gkey[]) 
+{ 
+
+    if (node == NULL)
+    {
+        return newNode(key, gkey); 
+    }
+    int ret = strcmp(key, node->key);
+    if (ret < 0) 
+    {
+        node->left  = insert(node->left, key, gkey); 
+    }
+    else if (ret > 0)
+    {
+        node->right = insert(node->right, key, gkey);    
+    }
+    else
+    {
+        printf("String already exists \n");
+    }
+    
+    return node; 
+} 
+
+struct node * minValueNode(struct node* node) 
+{ 
+    struct node* current = node; 
+  
+    /* loop down to find the leftmost leaf */
+    while (current && current->left != NULL) 
+        current = current->left; 
+  
+    return current; 
+} 
+  
+struct node* deleteNode(struct node* root, char *key[]) 
+{ 
+    if (root == NULL)
+    {
+        return root; 
+    }
+    
+    int ret = strcmp(key, root->key);
+    if (ret < 0) 
+    {
+        root->left = deleteNode(root->left, key); 
+    }
+    else if (ret > 0 ) 
+    {
+        root->right = deleteNode(root->right, key); 
+    }
+    else
+    { 
+        // node with only one child or no child 
+        if (root->left == NULL) 
+        { 
+            struct node *temp = root->right; 
+            free(root); 
+            return temp; 
+        } 
+        else if (root->right == NULL) 
+        { 
+            struct node *temp = root->left; 
+            free(root); 
+            return temp; 
+        } 
+  
+        // node with two children: Get the inorder successor (smallest 
+        // in the right subtree) 
+        struct node* temp = minValueNode(root->right); 
+  
+        // Copy the inorder successor's content to this node 
+        strcpy(root->key, temp->key); 
+
+        // Delete the inorder successor 
+        root->right = deleteNode(root->right, temp->key); 
+    } 
+    return root; 
+} 
+
+
+//---------------
+struct node* print2DUtil(struct node* root, int space, int COUNT) 
+{ 
+    // Base case 
+    //COUNT = inorder(root);
+    // Increase distance between levels 
+    if (root == NULL) 
+        return 0; 
+    space += COUNT; 
+  
+    // Process right child first 
+    print2DUtil(root->right, space, COUNT); 
+  
+    // Print current node after space 
+    // count 
+    printf("\n"); 
+    for (int i = COUNT; i < space; i++)
+    {
+        printf("          "); 
+    }
+    printf("%s \n", root->key); 
+  
+    // Process left child 
+    print2DUtil(root->left, space, COUNT); 
+} 
+//---------------
 
 
 
-void main()
-{
-	printf("Welcome to our search Tree! \n Binary search tree is empty! \n If you want to perform all possible actions, first you must insert elements! \n Enjoy! \n");
-	
-	//Δέσμευση χώρου για την υλοποίση ενός κόμβου από το struct node_t
-	node_t* root = malloc(sizeof(node_t));
-	
-	//Το πρόγραμμα εκτελείται μέχρι ο χρήστης να επιλέξη ενέργεια με αριθμό διάφορο του 1, 2, 3. Έτσι το πρόγραμμα θα τερματίσει (Δες default στη switch)
-	while (true)
-	{
-		printf("Choose one from the following actions: \n 1:Insert element \n 2:Delete element \n 3:Search element \n 0:Exit system: ");
-		//Ορίζουμε προεπιλογή την έξοδο από το πρόγραμμα
-		int ans = 0;
-		//Ο χρήστης επιλέγει ποια από τις 4 ενέργεια θέλει να εκτελέσει
-		scanf("%d", &ans);
-		switch (ans)
-		{
-			case 1:
-				/*
-					Εισαγωγή στοιχείου
-					Αν το γράμμα δεν έχει καταχωρηθεί στο δέντρο, δημιουργείται και μετά εισάγεται η λέξη
-				*/
-				printf("Please insert a word (Use only characters): ");
-				char word[255];
-				scanf("%s", word);
-				/*
-					Χρησιμοποιούμε τη συνάρτηση search για να δούμε αν υπάρχει το πρώτο γράμμα της λέξης που δώθηκε
-					Αν υπάρχει το γράμμα τότε εκτελείται η else 
-					Αν το γράμμα δεν υπάρχει εκτελείται η if
-				*/
-				if (search(root, word[0]))
-				{
-					//Χρησιμοποιείται η συνάρτηση push, για τη δημιουργεία νέου κόμβου (για τη δημιουργία νέου γράμματος στο δέντρο)
-					push(root, word[0], word);
-				}					
-				else
-				{
-					//Χρησιμοποιείται η συνάρτηση insert για την εισαγωγή της νέας λέξης στο πίνακα
-					insert(word);
-				}
-				break;
 
-			
-			case 2:
-				//Διαγραφή στοιχείου
-				break;
+int inorderC(struct node *root, char *word[]) 
+{ 
+    char x[255];
+    int j =0;
+    if (root != NULL) 
+    { 
+        
+        inorderC(root->left, word);
 
-			
-			case 3:
-				//Αναζήτηση στοιχείου
-				break;
+        strcpy(x , root->key);
+        if(strstr(x, word) != NULL)
+        {
+            printf("English word: |    %s      |Tranlsation: |    %s \n", root->key, root->gkey); 
+        }
+        inorderC(root->right, word); 
+    } 
+    return 0;
+} 
 
-			
-			default:
-				//Έξοδος από το σύστημα (με ειασγωγή οποιουδήποτε αριθμού
-				exit(EXIT_SUCCESS);
-				break;
-		}
-	}
-}
+
+
+
+
+int main() 
+{ 
+    struct node *root = NULL; 
+    root = insert(root, "gravity", "βαρύτητα"); 
+    insert(root, "gravel", "χαλίκι");
+    insert(root, "cityseventeen", "πόλη17");
+    insert(root, "mother", "μητέρα"); 
+    insert(root, "black", "μαύρος"); 
+    insert(root, "mirror", "καθρεύτης");
+    insert(root, "cyberpunk2077", "σαιμπερπανκ2077");
+    insert(root, "cyberpunk", "σαιμπερπανκ");
+    insert(root, "twotowers", "δύοπύργοι");
+    insert(root, "thecakeisaliethecakeisaliethecakeisalie", "τοκέικείναιψέματοκέικείναιψέματοκέικείναιψέμα");
+    char word[255];
+    char gword[255];
+    int COUNT = inorder(root);
+    while(true)
+    {
+        //COUNT = inorder(root);
+        printf("Choose one from the following actions: \n 1:Insert element \n 2:Delete element \n 3:Search element \n 4:Print Binary tree \n 0:Exit system: ");
+        int ans = 0;
+        scanf("%d", &ans);
+        switch (ans)
+        {
+            case 1:
+                printf("Please insert(creates new node) the english word (Use only characters): ");
+                scanf("%s", word);
+                printf("Please insert(creates new node) the greek word (Use only characters): ");
+                scanf("%s", gword);
+                insert(root, word, gword);
+                break;
+
+            case 2:
+                printf("Please delete(deletes a node) a word (Use only characters): ");
+                scanf("%s", word);
+                deleteNode(root, word);
+                break;
+
+            case 3:
+                printf("Please input chars (search based on chars): ");
+                scanf("%s", word);
+                ans = strlen(word);
+                inorderC(root, word);
+                break;
+
+            case 4:
+                print2DUtil(root,0, COUNT);
+                break;
+
+            default:
+                exit(EXIT_SUCCESS);
+                break;
+        }
+    } 
+   
+    return 0; 
+} 
 

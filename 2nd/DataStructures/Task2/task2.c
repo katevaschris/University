@@ -192,8 +192,8 @@ int main()
     insert(root, "mother", "μητέρα"); 
     insert(root, "black", "μαύρος"); 
     insert(root, "mirror", "καθρεύτης");
-    insert(root, "cyberpunk2077", "σαιμπερπανκ2077");
-    insert(root, "cyberpunk", "σαιμπερπανκ");
+    insert(root, "cyberpunk2077", "σάιμπερπανκ2077");
+    insert(root, "cyberpunk", "σάιμπερπανκ");
     insert(root, "twotowers", "δύοπύργοι");
     insert(root, "thecakeisaliethecakeisaliethecakeisalie", "τοκέικείναιψέματοκέικείναιψέματοκέικείναιψέμα");
     char word[255];

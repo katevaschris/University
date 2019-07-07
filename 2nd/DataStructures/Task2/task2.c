@@ -12,7 +12,8 @@
 	Athens 5, July 2019
 
 	Main purpose:
-*/#include<stdio.h> 
+*/
+#include<stdio.h> 
 #include<stdlib.h>
 #include<stdbool.h> 
 

@@ -1,18 +1,3 @@
-/*
-	Main Authors: Pakou Eva, Katevas Chris
-
-	Pakou Eva
-	p18118
-	github: https://github.com/Evaggelia18
-
-	Katevas Chris
-	p18068
-	github: https://github.com/katevaschris
-
-	Athens 5, July 2019
-
-	Main purpose:
-*/
 #include<stdio.h> 
 #include<stdlib.h>
 #include<stdbool.h> 
@@ -186,7 +171,9 @@ int inorderC(struct node *root, char *word[])
 int main() 
 { 
     struct node *root = NULL; 
-    root = insert(root, "gravity", "βαρύτητα"); 
+    root = insert(root, "gravity", "βαρύτητα");
+    insert(root, "gin", "τζιν"); 
+    insert(root, "gintonic", "τζιντόνικ");
     insert(root, "gravel", "χαλίκι");
     insert(root, "cityseventeen", "πόλη17");
     insert(root, "mother", "μητέρα"); 
@@ -240,4 +227,3 @@ int main()
    
     return 0; 
 } 
-

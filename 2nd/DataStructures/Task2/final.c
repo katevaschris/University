@@ -19,7 +19,8 @@ struct node *newNode(char *item[])
    
 
 int inorder(struct node *root) 
-{ int c = 0; 
+{ 
+    int c = 0; 
     if (root != NULL) 
     { 
         inorder(root->left); 
@@ -154,15 +155,15 @@ int inorderC(struct node *root, char *word[])
         strcpy(x , root->key);
         for (int i = 0; i < strlen(word); ++i)
         {
-            if (x[i] == word[i])
+            //if (x[i] == word[i])
+            if(strstr(x, word) != NULL)
             {
                 j++;
             }
         }
-        printf("%d\n", j); 
         if (j == strlen(word))
         {
-            printf("8%s \n", root->key); 
+            printf("%s \n", root->key); 
             j = 0;
         }
 
@@ -226,8 +227,7 @@ int main()
                 exit(EXIT_SUCCESS);
                 break;
         }
-    }
-    inorder(root); 
+    } 
    
     return 0; 
 } 

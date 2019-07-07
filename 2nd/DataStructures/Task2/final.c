@@ -1,6 +1,5 @@
 #include<stdio.h> 
 #include<stdlib.h> 
-#include<stdbool.h>
 
 struct node 
 { 
@@ -153,20 +152,10 @@ int inorderC(struct node *root, char *word[])
         inorderC(root->left, word);
 
         strcpy(x , root->key);
-        for (int i = 0; i < strlen(word); ++i)
-        {
-            //if (x[i] == word[i])
-            if(strstr(x, word) != NULL)
-            {
-                j++;
-            }
-        }
-        if (j == strlen(word))
+        if(strstr(x, word) != NULL)
         {
             printf("%s \n", root->key); 
-            j = 0;
         }
-
         inorderC(root->right, word); 
     } 
     return 0;

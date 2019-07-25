@@ -1,7 +1,7 @@
 # University
 Here it is all my University's tasks...
 Enjoy! 
-1st Semester \n
+1st Semester 
 2nd Semester
 3rd Semester
 4th Semester

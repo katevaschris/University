@@ -1,5 +1,5 @@
 # University
-Here it is all my University's tasks...
+University's tasks...
 Enjoy! 
 1st Semester 
 2nd Semester

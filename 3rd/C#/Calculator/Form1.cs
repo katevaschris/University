@@ -15,32 +15,77 @@ namespace Calculator
         {
             double x = 0;
             double y = 0;
-            if(textBox1.Text != "")
+
+            double num;
+
+            if (textBox1.Text != "")
             {
-                x = Convert.ToDouble(textBox1.Text);
+                if (double.TryParse(textBox1.Text, out num))
+                {
+                    x = Convert.ToDouble(textBox1.Text);
+                }
+                else if (textBox1.Text == "e")
+                {
+                    x = 2.71828;
+                }
+                else if (textBox1.Text == "pi" || textBox1.Text == "π")
+                {
+                    x = 3.14159;
+                }
+                else
+                {
+                    MessageBox.Show("Watch out Mate!");
+                    //Application.Exit();
+                }
             }
             if(textBox2.Text != "")
             {
-                y = Convert.ToDouble(textBox2.Text);
+                if (double.TryParse(textBox2.Text, out num))
+                {
+                    y = Convert.ToDouble(textBox2.Text);
+                }
+                else if (textBox2.Text == "e")
+                {
+                    y = 2.71828;
+                }
+                else if (textBox2.Text == "pi" || textBox2.Text == "π")
+                {
+                    y = 3.14159;
+                }
+                else
+                {
+                    MessageBox.Show("Watch out Mate!");
+                    //Application.Exit();
+                }
             }
-            
+
+
             string symbol = this.comboBox1.GetItemText(this.comboBox1.SelectedItem);
             if(symbol == "+")
             {
-                result_label.Text = (Convert.ToDouble(textBox1.Text) + Convert.ToDouble(textBox2.Text)).ToString();
+                result_label.Text = (x + y).ToString();
             }
             else if(symbol == "-")
             {
-                result_label.Text = (Convert.ToDouble(textBox1.Text) - Convert.ToDouble(textBox2.Text)).ToString();
+                result_label.Text = (x - y).ToString();
             }
             else if (symbol == "*")
             {
-                result_label.Text = (Convert.ToDouble(textBox1.Text) * Convert.ToDouble(textBox2.Text)).ToString();
+                result_label.Text = (x * y).ToString();
             }
             else if (symbol == "/")
             {
                 //You can actually divide with zero!
-                result_label.Text = (Convert.ToDouble(textBox1.Text) / Convert.ToDouble(textBox2.Text)).ToString();
+                //Gets +infinty in case +/0
+                //Gets -infinty in case -/0
+                result_label.Text = (x / y).ToString();
+                if(x == 0)
+                {
+                    if(y == 0)
+                    {
+                        result_label.Text = "To infinity and beyond!!";
+                    }
+                }
             }
             else if(symbol == "^")
             {
@@ -56,7 +101,14 @@ namespace Calculator
             }
             else// if (symbol == "√")
             {
-                result_label.Text = (Math.Sqrt(y)).ToString();
+                if (y < 0)
+                {
+                    result_label.Text = "Only positive numbers!";
+                }
+                else
+                {
+                    result_label.Text = (Math.Sqrt(y)).ToString();
+                }
             }
 
         }
@@ -75,5 +127,6 @@ namespace Calculator
         {
             
         }
+
     }
 }

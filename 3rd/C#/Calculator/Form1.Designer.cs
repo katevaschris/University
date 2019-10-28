@@ -1,4 +1,4 @@
-﻿namespace Calculator
+namespace Calculator
 {
     partial class Form1
     {
@@ -42,7 +42,7 @@
             this.calculate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.calculate.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.calculate.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.calculate.Location = new System.Drawing.Point(35, 98);
+            this.calculate.Location = new System.Drawing.Point(12, 98);
             this.calculate.Name = "calculate";
             this.calculate.Size = new System.Drawing.Size(89, 32);
             this.calculate.TabIndex = 0;
@@ -53,10 +53,10 @@
             // result_label
             // 
             this.result_label.AutoSize = true;
-            this.result_label.BackColor = System.Drawing.SystemColors.Window;
+            this.result_label.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.result_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.result_label.ForeColor = System.Drawing.Color.Black;
-            this.result_label.Location = new System.Drawing.Point(214, 98);
+            this.result_label.Location = new System.Drawing.Point(122, 102);
             this.result_label.Name = "result_label";
             this.result_label.Size = new System.Drawing.Size(19, 25);
             this.result_label.TabIndex = 1;
@@ -66,7 +66,7 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(24, 26);
+            this.textBox1.Location = new System.Drawing.Point(12, 26);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 31);
             this.textBox1.TabIndex = 2;
@@ -74,7 +74,7 @@
             // textBox2
             // 
             this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(201, 26);
+            this.textBox2.Location = new System.Drawing.Point(228, 26);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 31);
             this.textBox2.TabIndex = 3;
@@ -92,9 +92,9 @@
             "Round",
             "Abs",
             "√"});
-            this.comboBox1.Location = new System.Drawing.Point(135, 26);
+            this.comboBox1.Location = new System.Drawing.Point(118, 26);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(60, 33);
+            this.comboBox1.Size = new System.Drawing.Size(104, 33);
             this.comboBox1.TabIndex = 4;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.ComboBox1_SelectedIndexChanged);
             // 
@@ -104,7 +104,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.ClientSize = new System.Drawing.Size(340, 210);
+            this.ClientSize = new System.Drawing.Size(337, 190);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);

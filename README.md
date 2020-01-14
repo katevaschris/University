@@ -1,5 +1,2 @@
 # University
-University's tasks...
-Enjoy! 
-1st Semester,  
-2nd Semester...
+University's tasks

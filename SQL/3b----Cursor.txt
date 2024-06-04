@@ -1,0 +1,39 @@
+/*ΕΡΩΤΗΜΑ 3.b 
+Απαντήστε σε ένα από τα υποερωτήματα από το ερώτημα 2 (όποιο επιθυμείτε)
+χρησιμοποιώντας cursors. Συγκεκριμένα, θα φτιάξετε μια συνάρτηση, η οποία θα
+διαβάζει το αποτέλεσμα από το query με έναν cursor και θα επιστρέφει το 
+αποτέλεσμα σαν πίνακα. Καλέστε τη συνάρτηση μία φορά και δείξτε το αποτέλεσμα
+με screenshot. */
+
+
+--ΕΡΩΤΗΜΑ 2.α (Πόσες κρατήσεις αντιστοιχούν σε κάθε κατηγορία δωματίων) ΜΕ ΤΗΝ ΧΡΗΣΗ CURSOR
+
+CREATE OR REPLACE FUNCTION my_funct(roomid1 integer)
+RETURNS TABLE(room text) as $$
+DECLARE
+	rec_rooms RECORD;
+
+	cur_rooms CURSOR(roomid1 integer) FOR
+	SELECT ROOMFULLNAME
+	FROM ROOMS
+	WHERE ROOMS.ROOMID = roomid1;
+
+BEGIN
+	
+	OPEN cur_rooms(roomid1);
+	
+LOOP 
+
+	FETCH cur_rooms INTO rec_rooms;
+	
+	EXIT WHEN NOT FOUND;
+	
+	room := rec_rooms.ROOMFULLNAME; 
+	
+		RETURN NEXT;
+		END LOOP;
+		CLOSE cur_rooms;
+		END;$$
+LANGUAGE plpgsql;
+
+SELECT F.ROOM,COUNT(F.ROOM) FROM RESERVATIONS R,my_funct(R.ROOMID) F GROUP BY F.ROOM;

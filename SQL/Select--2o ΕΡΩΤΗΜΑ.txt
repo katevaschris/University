@@ -1,0 +1,102 @@
+--(a) Πόσες κρατήσεις αντιστοιχούν σε κάθε κατηγορία δωματίων
+
+SELECT ROOMFULLNAME,COUNT(ROOMFULLNAME)
+FROM RESERVATIONS,ROOMS
+WHERE RESERVATIONS.ROOMID = ROOMS.ROOMID
+GROUP BY ROOMFULLNAME;
+
+========================================================================================
+
+
+--(b) Ποια κατηγορία δωματίων παρουσιάζει βάσει των κρατήσεων τον μεγαλύτερο τζίρο.
+
+DROP TABLE IF EXISTS TURNOVERS; -- TEMP TABLE WITH ALL TURNOVERS (TZIROI)
+CREATE TEMPORARY TABLE TURNOVERS AS(
+SELECT ROOMFULLNAME,SUM(BILL) AS TURNOVER
+FROM RESERVATIONS,RESERVATION_PAYMENT,ROOMS
+WHERE RESERVATIONS.RESERVATIONID = RESERVATION_PAYMENT.RESERVATIONID AND RESERVATIONS.ROOMID = ROOMS.ROOMID
+GROUP BY ROOMFULLNAME);
+
+
+WITH MAX_ AS (SELECT MAX(TURNOVER) AS MAX_T FROM TURNOVERS )
+SELECT * FROM TURNOVERS WHERE TURNOVER=(SELECT MAX_T FROM MAX_);
+
+
+========================================================================================
+
+--(c) Πόσα δωμάτια είναι προς το παρόν διαθέσιμα προς κράτηση.
+--Θα εμφανιζει ποσα δωματια ειναι διαθεσιμα προς κρατηση σημερα.
+
+WITH ENGAGED AS(SELECT ROOMID FROM RESERVATIONS WHERE CHECK_IN <= CURRENT_DATE AND CHECK_OUT > CURRENT_DATE)
+
+
+SELECT 'AVAILABLE ROOMS',COUNT(*)
+FROM ROOMS
+LEFT JOIN ENGAGED USING(ROOMID)
+WHERE ENGAGED.ROOMID IS NULL;
+
+
+
+========================================================================================
+
+
+--(d) Ποιες παροχές (facilities) διατίθενται σε συγκεκριμένα δωμάτια
+
+SELECT ROOMS.ROOMID,ROOMFULLNAME,ROOM_FACILITIES.BreakFast, ROOM_FACILITIES.StreetView, ROOM_FACILITIES.SeaView, ROOM_FACILITIES.MountainView, ROOM_FACILITIES.Spa, ROOM_FACILITIES.Bathtub, ROOM_FACILITIES.Shower, ROOM_FACILITIES.TV
+FROM ROOMS,ROOM_FACILITIES
+WHERE ROOMS.ROOMID = ROOM_FACILITIES.ROOMID;
+
+========================================================================================
+
+--(e) Ποιοι επισκέπτες έχουν κράτηση αυτό το μήνα.
+
+
+SELECT RESERVATIONID,NAMEOFRESERVATION,CHECK_IN,CHECK_OUT,ROOMID
+FROM RESERVATIONS
+WHERE ((EXTRACT(MONTH FROM CHECK_IN) = EXTRACT(MONTH FROM LOCALTIMESTAMP) )OR (EXTRACT(MONTH FROM CHECK_OUT) = EXTRACT(MONTH FROM LOCALTIMESTAMP)) )
+		AND ((EXTRACT(YEAR FROM CHECK_IN) = EXTRACT(YEAR FROM LOCALTIMESTAMP)) OR (EXTRACT(YEAR FROM CHECK_OUT) = EXTRACT(YEAR FROM LOCALTIMESTAMP)));
+
+========================================================================================
+
+--(f) Ποιο είναι το μέσο κέρδος ανά τύπο/κατηγορία δωματίου για τη θερινή σεζόν.
+
+
+SELECT ROOMFULLNAME,COUNT(*),ROUND(AVG(BILL),2)
+FROM RESERVATIONS,ROOMS,RESERVATION_PAYMENT
+WHERE RESERVATIONS.PAYMENTID = RESERVATION_PAYMENT.PAYMENTID AND (EXTRACT(MONTH FROM CHECK_IN) >= 6) AND (EXTRACT(MONTH FROM CHECK_IN)<=9) AND RESERVATIONS.ROOMID = ROOMS.ROOMID 
+AND (EXTRACT(YEAR FROM CHECK_IN) = EXTRACT(YEAR FROM LOCALTIMESTAMP))
+GROUP BY ROOMFULLNAME;
+
+
+==========================================================================================
+
+--(g) Ποιος είναι ο πελάτης με τις περισσότερες κρατήσεις ανά εύρος ζώνης τιμής δωματίου.
+
+WITH SDA AS(
+SELECT NAMEOFRESERVATION,ROOMFULLNAME,SUM(NUMBEROFROOMS) AS SUMA
+FROM RESERVATIONS,ROOMS
+WHERE RESERVATIONS.ROOMID = ROOMS.ROOMID
+GROUP BY ROOMFULLNAME,nameofreservation
+ORDER BY ROOMFULLNAME)
+,
+MAX_SDA AS (
+SELECT ROOMFULLNAME,MAX(SUMA) AS MAX_SUMA
+FROM SDA
+GROUP BY ROOMFULLNAME)
+
+SELECT NAMEOFRESERVATION,MAX_SDA.ROOMFULLNAME,MAX_SUMA
+FROM SDA,MAX_SDA
+WHERE SUMA = MAX_SUMA AND MAX_SDA.ROOMFULLNAME = SDA.ROOMFULLNAME;
+
+
+===========================================================================================
+
+--(h) Ποια δωμάτια ενοικιάστηκαν από την ημερομηνία “X” έως και σήμερα.
+
+--ΔΙΑΛΕΓΟΥΜΕ ΜΙΑ ΗΜΕΡΟΜΗΝΙΑ ΠΧ 01-01-2020
+
+SELECT NAMEOFRESERVATION,RESERVATIONS.ROOMID,ROOMFULLNAME,CHECK_IN,CHECK_OUT
+FROM RESERVATIONS,ROOMS
+WHERE CHECK_IN >= '2020-01-01'::DATE AND CHECK_OUT <= CURRENT_DATE AND RESERVATIONS.ROOMID = ROOMS.ROOMID
+ORDER BY CHECK_IN;
+

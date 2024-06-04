@@ -1,0 +1,282 @@
+--THE DATABASE IS IN 3 NORMAL FORM
+
+-- Database: courses
+
+-- DROP DATABASE courses;
+
+CREATE DATABASE courses
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Greek_Greece.1253'
+    LC_CTYPE = 'Greek_Greece.1253'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+
+
+CREATE TYPE Room AS ENUM('DBL BUDGET','DBL STD','DBL DLX',
+						  'TPL BUDGET','TPL STD','TPL DLX',
+						  'QUAD BUDGET','QUAD STD','QUAD DLX'); --ALL THE ROOM TYPES
+
+CREATE TABLE RESERVATIONS ( 
+	ReservationID int NOT NULL,  
+	NameOfReservation name NOT NULL, 
+	DateOfReservation timestamp with time zone NOT NULL,
+	Pax int NOT NULL,  
+	NumberOfRooms int NOT NULL,
+	RoomID int NOT NULL,
+	ClientID int NOT NULL,
+	Check_In date NOT NULL, 
+	Check_Out date NOT NULL, 
+	Stay int NOT NULL,
+	PaymentID int NOT NULL,
+	PRIMARY KEY( ReservationID )  
+	);
+	
+CREATE TABLE RESERVATION_PAYMENT (
+	PaymentID int NOT NULL,
+	ReservationID int NOT NULL,
+	Bill int NOT NULL,
+	Paid boolean NOT NULL,
+	Deadline date NOT NULL,
+	PRIMARY KEY( PaymentID )  
+	);
+	
+	
+	
+CREATE EXTENSION citext;
+CREATE DOMAIN emailDomain AS citext
+CHECK ( value ~* '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' );
+	   
+CREATE TYPE titles AS ENUM('Mr','Ms'); --ALL THE TITLES
+	   
+	
+CREATE TABLE CLIENTS ( 
+	ClientID int NOT NULL,  
+	Title text NOT NULL,
+	Name text NOT NULL,  
+	Age int NOT NULL, 
+	HomeID int NOT NULL,
+	PhoneNumber numeric(10,0) NOT NULL UNIQUE,
+	Email emailDomain NOT NULL UNIQUE,
+	CardNumber numeric(16,0) NOT NULL UNIQUE,
+	PRIMARY KEY( ClientID )  
+	);
+	
+CREATE TABLE CLIENT_HOME(
+	HomeID int NOT NULL,
+	ClientID int NOT NULL,
+	Country text NOT NULL, 
+	Town text NOT NULL,
+	Street text NOT NULL,
+	Street_Num int NOT NULL,
+	Postcode text NOT NULL,
+	PRIMARY KEY( HomeID )  
+	);
+
+CREATE TABLE ROOMS ( 
+	RoomID int NOT NULL,  
+	FacilitiesID int NOT NULL,
+	RoomCapacity int NOT NULL, -- DOUBLE-TWIN(2),TRIPLE(3),QUAD(4)
+	RoomType text NOT NULL,  -- COST ZONE (BUDGET,STANDARD (STD) ,DELUXE (DLX))
+	RoomFullName room NOT NULL, --DBL BUDGET,DBL STD, ETC.
+	Cost int NOT NULL, 
+	PRIMARY KEY( RoomID )  
+	);
+	
+CREATE TABLE TRANSACTIONS ( 
+	TransactionID int NOT NULL,  
+	ReservationID int NOT NULL,
+	ClientID int NOT NULL,
+	CardNumber numeric(16,0) NOT NULL,
+	Cost int NOT NULL, 
+	PRIMARY KEY( TransactionID )  
+	);
+
+CREATE TABLE ROOM_FACILITIES (
+	FacilityID int NOT NULL,
+	RoomID int NOT NULL,
+	BreakFast boolean NOT NULL,
+	StreetView boolean NOT NULL,
+	SeaView boolean NOT NULL,
+	MountainView boolean NOT NULL,
+	Spa boolean NOT NULL,
+	Bathtub boolean NOT NULL,
+	Shower boolean NOT NULL,
+	TV boolean NOT NULL,
+	PRIMARY KEY( FacilityID )  
+	);
+
+
+
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (1, 'Somerset McCaw', '2019-07-11 03:27:57', 2, 17, 18,1, '2019-04-03', '2019-04-05', 2, 1);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (2, 'George Ifantis', '2019-07-12 17:49:20', 1, 10, 10,2, '2020-07-12', '2020-07-16', 4, 2);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (3, 'Janelle Poon', '2019-12-14 05:09:05', 3, 13, 3,3, '2020-07-07', '2020-07-22', 15, 3);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (4, 'Giannis Fotopoulos', '2019-09-29 07:30:18', 3, 6, 3,4, '2020-08-31', '2020-09-19', 20, 4);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (5, 'Giannis Fotopoulos', '2019-10-09 02:44:21', 1, 5, 10,5, '2020-12-09', '2020-12-28', 19, 5);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (6, 'Giannis Fotopoulos', '2019-11-17 15:22:52', 1, 13, 10,6, '2020-12-16', '2020-12-24', 8, 6);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (7, 'George Ifantis', '2020-04-06 13:13:27', 2, 6, 18,7, '2019-12-19', '2019-12-30', 11, 7);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (8, 'Janelle Poon', '2019-09-07 23:16:40', 3, 1, 2,8, '2020-04-26', '2020-05-01', 6, 8);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (9, 'Somerset McCaw', '2019-10-21 01:22:03', 1, 16, 7,9, '2020-01-15', '2020-01-17', 12, 9);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (10, 'George Ifantis', '2019-05-30 21:33:33', 2, 18, 14,10, '2019-02-24', '2019-02-26', 2, 10);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (11, 'Angelico Tesoe', '2019-07-19 15:46:01', 2, 11, 7,11, '2019-11-01', '2019-11-13', 12, 11);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (12, 'Somerset McCaw', '2020-01-22 11:48:51', 2, 9, 8,12, '2020-06-23', '2020-06-24', 1, 12);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (13, 'George Ifantis', '2020-04-04 13:55:27', 1, 14, 14,13, '2019-11-28', '2019-12-08', 10, 13);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (14, 'Angelico Tesoe', '2019-06-08 01:01:01', 2, 5, 17,14, '2020-12-03', '2020-12-10', 7, 14);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (15, 'George Ifantis', '2019-06-03 05:04:51', 4, 18, 3,15, '2020-05-04', '2020-5-18', 14, 15);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (16, 'George Ifantis', '2019-12-03 23:00:23', 4, 1, 14,16, '2019-10-02', '2019-10-11', 9, 16);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (17, 'Christos Katevas', '2020-03-23 01:24:01', 2, 18,17, 11, '2020-02-04', '2020-02-06', 2, 17);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (18, 'Jecho Wailes', '2019-11-05 06:00:09', 4, 16, 13,18, '2020-03-20', '2020-03-25', 5, 18);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (19, 'Thatcher Moffet', '2019-10-17 03:18:31', 3, 4, 3,19, '2019-05-13', '2019-05-30', 17, 19);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (20, 'George Ifantis', '2019-10-04 00:44:08', 4, 6, 15,20, '2020-05-11', '2020-05-30', 19, 20);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (21, 'Carree Groome', '2020-04-21 13:25:38', 1, 6, 9,21, '2019-10-03', '2019-10-15', 12, 21);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (22, 'George Ifantis', '2019-07-13 09:03:05', 2, 12, 3,22, '2019-05-05', '2019-05-24', 19, 22);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (23, 'Giannis Fotopoulos', '2020-01-03 18:59:49', 1, 7, 12,23, '2020-06-18', '2020-06-24', 6, 23);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (24, 'Christos Katevas', '2019-07-08 20:34:45', 3, 3, 9,24, '2020-03-21', '2020-03-23', 2, 24);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (25, 'Angelico Tesoe', '2019-10-29 16:45:30', 2, 9, 2,25, '2020-07-06', '2020-07-22', 16, 25);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (26, 'Somerset McCaw', '2019-09-28 05:12:35', 1, 5, 11,26, '2019-01-02', '2019-01-21', 19, 26);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (27, 'Carree Groome', '2019-10-25 11:02:08', 4, 13, 14,27, '2020-09-12', '2020-09-17', 5, 27);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (28, 'Somerset McCaw', '2019-06-01 23:58:16', 4, 18, 4,28, '2019-01-31', '2019-01-3', 3, 28);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (29, 'Giannis Fotopoulos', '2020-05-05 14:04:13', 2, 14, 17,29, '2020-01-01', '2020-01-17', 16, 29);
+insert into Reservations (reservationid, nameofreservation, dateofreservation, pax, numberofrooms, roomid,ClientID, check_in, check_out, stay, paymentid) values (30, 'Giannis Fotopoulos', '2019-06-29 18:59:09', 4, 18, 1,30, '2020-09-23', '2020-09-18', 5, 30);
+
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (1, 1, 126, true, '2020-12-08');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (2, 2, 87, false, '2020-03-05');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (3, 3, 120, false, '2021-01-01');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (4, 4, 183, false, '2020-06-20');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (5, 5, 163, false, '2020-08-22');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (6, 6, 119, true, '2020-09-03');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (7, 7, 78, false, '2020-09-08');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (8, 8, 114, false, '2020-11-02');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (9, 9, 69, false, '2021-01-03');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (10, 10, 198, false, '2020-11-15');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (11, 11, 173, true, '2020-11-13');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (12, 12, 55, false, '2020-06-23');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (13, 13, 133, false, '2020-05-05');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (14, 14, 176, false, '2020-08-02');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (15, 15, 156, false, '2020-05-04');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (16, 16, 119, false, '2020-03-06');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (17, 17, 174, false, '2020-09-05');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (18, 18, 93, false, '2020-05-30');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (19, 19, 149, false, '2020-04-29');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (20, 20, 162, false, '2020-12-22');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (21, 21, 75, false, '2020-10-23');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (22, 22, 149, false, '2020-10-17');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (23, 23, 136, true, '2020-08-21');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (24, 24, 144, false, '2020-04-08');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (25, 25, 56, false, '2020-11-15');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (26, 26, 159, true, '2020-05-12');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (27, 27, 77, true, '2020-05-29');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (28, 28, 93, false, '2020-03-13');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (29, 29, 175, true, '2020-07-08');
+insert into Reservation_Payment (paymentid, reservationid, bill, paid, deadline) values (30, 30, 161, true, '2020-06-18');
+
+insert into Clients (Clientid, Title, Name, Age,HomeID,PhoneNumber, Email, CardNumber) values (1, 'Mr', 'Luigi Sibray', 1,1, '4248317560', 'lsibray0@nhs.uk', '3539209972894373');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (2, 'Ms', 'Wren Matuskiewicz', 2,2, '6531042328', 'wmatuskiewicz1@npr.org', '3032059554828615');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (3, 'Ms', 'Natalie Baldwin', 3,3,  '9673158156', 'nbaldwin2@smugmug.com', '3540459272489443');
+insert into Clients (Clientid, Title, Name, Age,HomeID,PhoneNumber, Email, CardNumber) values (4, 'Mr', 'Ashlin Claremont', 4,4, '4975479782', 'aclaremont3@auda.org.au', '3551476823940118');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (5, 'Ms', 'Maureene Aglione', 5,5,  '9811908995', 'maglione4@microsoft.com', '3137941501670870');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (6, 'Mr', 'Haily Wilkie', 6,6, '3505536544', 'hwilkie5@is.gd', '4905479515454522');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (7, 'Mr', 'Harley Kield', 7,7, '7359179850', 'hkield6@vimeo.com', '3532815134486655');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (8, 'Ms', 'Daniela Barraclough', 8,8,'5493508317', 'dbarraclough7@moonfruit.com', '5018227061003025');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (9, 'Ms', 'Ruggiero Kelinge', 9,9, '5004229578', 'rkelinge8@HGF.cn', '5602228246744591');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (10, 'Mr', 'Pepi Clewley', 10,10,  '4935581538', 'pclewley9@disqus.com', '3559858222989485');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (11, 'Ms', 'Moria Ockwell', 11,11,  '8601421231', 'mockwella@gmpg.org', '1201716388965251');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (12, 'Mr', 'Lezley Jorge', 12,12, '7952301810', 'ljorgeb@google.de', '0604797982696091');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (13, 'Ms', 'Cointon Docker', 13,13, '1691814378', 'cdockerc@weebly.com', '3579123763228793');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (14, 'Mr', 'Gertruda Okey', 14,14, '2835669295', 'gokeyd@narod.ru', '5446228568544116');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (15, 'Mr', 'Dal Hierro', 15, 15,'7997608841', 'dhierroe@unesco.org', '3554083975716853');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (16, 'Ms', 'Caroline Kevis',16,16,'3132847512', 'ckevisf@examiner.com', '6771761325410604');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (17, 'Ms', 'Hagan McCaghan',17,17 ,'7139071782', 'hmccaghang@merriam-webster.com', '3589192541832000');
+insert into Clients (Clientid, Title, Name, Age,HomeID,  PhoneNumber, Email, CardNumber) values (18, 'Mr', 'Carce Maud', 18,18 ,'5977048866', 'cmaudh@jimdo.com', '5423087240421821');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (19, 'Ms', 'Farris Furmston', 19,19 ,'3688580374', 'ffurmstoni@amazon.com', '6380195232353057');
+insert into Clients (Clientid, Title, Name, Age,HomeID, PhoneNumber, Email, CardNumber) values (20, 'Mr', 'Gwen Wallicker', 20,20, '1726706410', 'gwallickerj@google.fr', '3589803685516494');
+
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (1, 1,'Bulgaria', 'Athens', 'Ermou', 1, '2630');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (2, 2,'France', 'Athens', 'Ermou', 2, '94264 CEDEX');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (3, 3, 'Venezuela', 'Athens', 'Ermou', 3, '921264 CEDEX');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (4, 4,'Belarus', 'Athens', 'Ermou', 4, '969-7208');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (5, 5,'Japan', 'Athens', 'Ermou', 5, '969-7208');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (6, 6,'China', 'Athens', 'Ermou', 6, '115543');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (7, 7, 'Indonesia', 'Athens', 'Ermou', 7, '15335');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (8, 8,'China', 'Athens', 'Ermou', 8, '84dsa');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (9, 9, 'Czech Republic', 'Athens', 'Ermou', 9, '468 46');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (10, 10,'Indonesia', 'Athens', 'Ermou', 10, '55554fds');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (11, 11,'Brazil', 'Athens', 'Ermou', 11, '33800-000');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values(12, 12,'Indonesia', 'Athens', 'Ermou', 12, '54-515');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values(13, 13,'Poland', 'Athens', 'Ermou', 13, '05-280');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (14, 14,'Indonesia', 'Athens', 'Ermou', 14, 'dsa545');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (15, 15,'Indonesia', 'Athens', 'Ermou', 15, '54654');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (16, 16,'United States', 'Athens', 'Ermou', 16, '48232');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (17,17,'China', 'Athens', 'Ermou', 17, 'dsa5');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (18, 18,'Nicaragua', 'Athens', 'Ermou', 18, 'dsa54');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (19, 19,'Sweden', 'Athens', 'Ermou', 19, '121 63');
+insert into Client_Home (HomeID,Clientid,Country, Town, Street, Street_Num, PostCode) values (20, 20,'China', 'Athens', 'Ermou', 20, '1545');
+
+
+	
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (1,1, 1, 'STD','DBL STD', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (2,2, 2, 'STD','TPL STD', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (3, 3,3, 'STD','DBL DLX', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (4, 4, 4,'STD','QUAD STD', 60);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (5, 5,5, 'STD','DBL STD', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (6, 6,6, 'STD','DBL BUDGET', 10);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (7, 7,7, 'STD','DBL STD', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (8, 8,8, 'STD','TPL STD', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (9, 9,9, 'STD','DBL STD', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (10, 10,10, 'STD','QUAD STD', 60);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (11, 11,11, 'STD','DBL DLX', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (12,12, 12, 'STD','QUAD DLX', 80);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (13,13, 13, 'STD','TPL STD', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (14, 14,14, 'STD','TPL DLX', 60);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (15, 15,15, 'STD','TPL BUDGET', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (16,16, 16, 'STD','QUAD BUDGET', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (17,17, 17, 'STD','QUAD STD', 60);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (18,18, 18, 'STD','DBL STD', 20);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (19,19, 19, 'STD','TPL STD', 40);
+insert into Rooms (Roomid,FacilitiesID, RoomCapacity, RoomType,RoomFullName, Cost) values (20, 20,20, 'STD','QUAD STD', 60);
+
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (1, 1, true, false, false, false, true, true, true, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (2, 2, false, false, true, true, false, false, false, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (3, 3, false, true, false, true, false, false, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (4, 4, false, true, true, false, false, true, true, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (5, 5, true, true, false, true, true, true, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (6, 6, true, true, true, true, true, false, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (7, 7, false, true, false, true, false, true, true, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (8, 8, false, true, false, true, false, false, false, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (9, 9, false, true, false, true, false, true, true, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (10, 10, false, true, false, false, false, false, true, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (11, 11, false, true, false, false, true, false, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (12, 12, true, true, false, true, true, false, false, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (13, 13, false, false, true, true, false, true, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (14, 14, false, true, true, true, false, true, true, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (15, 15, true, true, false, false, false, false, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (16, 16, false, false, false, true, true, false, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (17, 17, false, false, false, true, true, true, false, false);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (18, 18, true, false, true, false, false, true, false, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (19, 19, false, true, false, false, true, false, true, true);
+insert into room_facilities (facilityID, roomID, breakfast, streetview, seaview, mountainview, spa, bathtub, shower, tv) values (20, 20, true, false, false, true, false, false, false, false);
+
+
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (1, 1, 1, '3008361807444715', 1);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (2, 2, 2, '5610593758580695', 2);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (3, 3, 3, '5641823328343750', 3);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (4, 4, 4, '5002350743086692', 4);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (5, 5, 5, '3047926252674215', 5);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (6, 6, 6, '6759477651579915', 6);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (7, 7, 7, '3575319733967239', 7);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (8, 8, 8, '3578917160005626', 8);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (9, 9, 9, '5602227098517931', 9);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (10, 10, 10, '3551919146142862', 10);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (11, 11, 11, '4041595938114057', 11);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (12, 12, 12, '3557590763796522', 12);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (13, 13, 13, '6706143448190801', 13);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (14, 14, 14, '3572081472241688', 14);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (15, 15, 15, '3538476072728469', 15);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (16, 16, 16, '4508420736630533', 16);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (17, 17, 17, '3549008213829562', 17);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (18, 18, 18, '6763399173673143', 18);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (19, 19, 19, '5602211487860979', 19);
+insert into Transactions (Transactionid, ReservationID, ClientID, CardNumber, Cost) values (20, 20, 20, '6761590681932474', 20);

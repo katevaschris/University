@@ -1,0 +1,5 @@
+/home/c/Downloads/Compg/CMakeFiles/edit_cache.dir
+/home/c/Downloads/Compg/CMakeFiles/rebuild_cache.dir
+/home/c/Downloads/Compg/CMakeFiles/cgal_check_build_system.dir
+/home/c/Downloads/Compg/CMakeFiles/ALL_CGAL_TARGETS.dir
+/home/c/Downloads/Compg/CMakeFiles/point_location.dir
